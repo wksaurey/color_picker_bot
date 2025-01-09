@@ -1,11 +1,14 @@
 import praw
 
-reddit = praw.Reddit(
-        client_id="my client id", 
-        client_secret="my client secret",
-        password="my password",
-        user_agent="my user agent",
-        username="my username",
-)
+reddit = praw.Reddit('color_picker_bot_creds')
 
-print(reddit.read_only)
+if not reddit.read_only:
+    print(f'Initialized u//color_picker_bot with write permissions')
+
+subreddit = reddit.subreddit('test')
+
+print(f'Listening to {subreddit.display_name} comment stream')
+for comment in subreddit.stream.comments():
+    if 'u/color_picker_bot' in comment.body:
+        comment.reply('Hello, I am a bot!')
+        print(f'Replied to comment {comment.id}')
